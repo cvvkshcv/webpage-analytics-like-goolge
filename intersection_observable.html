@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Intersection Observable</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha1.js"></script>
+</head>
+<body>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<div style="color: red;" id="hello">
+		<h1>My heading</h1>
+		<p>20 25% keeep building <span>fsdfas <b>fsdfs</b></span></p>
+		<p>20 15% keeep building</p>
+		<p>10 20% keeep building</p>
+	</div>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+	<h1>Hello</h1>
+
+	<script type="text/javascript">
+		Function.prototype.debounce = function (milliseconds, context) {
+		    var baseFunction = this,
+		        timer = null,
+		        wait = milliseconds;
+
+		    return function () {
+		        var self = context || this,
+		            args = arguments;
+
+		        function complete() {
+		            baseFunction.apply(self, args);
+		            timer = null;
+		        }
+
+		        if (timer) {
+		            clearTimeout(timer);
+		        }
+
+		        timer = setTimeout(complete, wait);
+		    };
+		};
+	</script>
+
+	<script type="text/javascript">
+		let helloDom = document.getElementById('hello');
+		let isDomVisible;
+		let idleTimer;
+		let idleSeconds = 0;
+		let thresholdTime = 3000;
+		let idleWaitingTime = 15;
+		let events = [];
+
+		function initInterval() {
+			idleTimer = setInterval(() => {
+				idleSeconds += (thresholdTime / 1000);
+				if (idleSeconds >= idleWaitingTime) {
+					clearInterval(idleTimer);
+					console.log('Not interacting');
+				}
+				console.log('Im idle');
+			}, thresholdTime);
+		}
+		function destroyInterval() {
+			if(idleTimer) {
+				idleSeconds = 0;
+				clearInterval(idleTimer);
+				console.log('Clearing idle', events);
+				// let cryp = CryptoJS.SHA1(events);
+				// console.log('Clearing idle', cryp);
+				// console.log(CryptoJS.enc.Hex.stringify(cryp));
+			}
+		}
+		function storeClicked(e) {
+			events.push(e.target.innerHTML);
+		}
+
+		helloDom.addEventListener('click', (e) => {
+			storeClicked(e);
+		});
+		document.body.addEventListener('mousemove', ((e) => {
+			if (isDomVisible) {
+				console.log('mouse moving');
+				destroyInterval();
+				initInterval(idleTimer);
+			}
+		}).debounce(500));
+		let observer = new IntersectionObserver((entries) => {
+			if (entries[0].intersectionRatio > 0) {
+				// console.log('Entered', entries[0]);
+				isDomVisible = true;
+				if (!idleTimer) {
+					initInterval(entries);
+				}
+			} else {
+				// console.log('Left', entries[0]);
+				isDomVisible = false;
+				destroyInterval();
+				console.log('Came out');
+				events = [];
+			}
+		}, {
+  			threshold: 0
+		});
+		observer.observe(helloDom);
+	</script>
+</body>
+
+</html>
